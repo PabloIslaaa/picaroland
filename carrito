@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Carrito – MiTienda</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="container top">
+      <div class="logo">👗 MiTienda</div>
+      <div class="links">
+        <a href="productos.html">Seguir comprando</a>
+        <a href="favoritos.html">Favoritos</a>
+        <a href="cuenta.html">Área personal</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Tu carrito</h1>
+    <table class="table" id="tabla"></table>
+    <p id="total" style="text-align:right;font-weight:700;"></p>
+    <div style="text-align:right;">
+      <button class="btn primary" id="checkout">Proceder al pago (demo)</button>
+    </div>
+    <p style="color:#666;font-size:.95em;">* Esto es una demo sin pagos reales. Para pagos auténticos, conecta Stripe Checkout / pasarela externa.</p>
+  </main>
+
+  <footer><div class="container"><p>© <span id="y"></span> MiTienda</p></div></footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script src="assets/js/products.js"></script>
+  <script type="module">
+    import { loadCart, setQty, removeFromCart } from "./assets/js/store.js";
+    const byId = id => window.PRODUCTS.find(p => p.id === id);
+
+    const render = () => {
+      const cart = loadCart();
+      const tabla = document.getElementById("tabla");
+      if (!cart.length) { tabla.innerHTML = "<tr><td>Tu carrito está vacío.</td></tr>"; document.getElementById("total").textContent = ""; return; }
+      const rows = cart.map(item => {
+        const p = byId(item.id);
+        const subtotal = p.price * item.qty;
+        return `
+          <tr data-id="${item.id}">
+            <td style="width:72px"><img src="${p.image}" alt="${p.name}" style="width:64px;height:64px;object-fit:cover;border-radius:6px"></td>
+            <td>${p.name}<br><small>€ ${p.price.toFixed(2)}</small></td>
+            <td><input type="number" min="1" value="${item.qty}" style="width:64px"></td>
+            <td>€ ${subtotal.toFixed(2)}</td>
+            <td><button class="btn remove">Quitar</button></td>
+          </tr>
+        `;
+      }).join("");
+      tabla.innerHTML = `<tr><th></th><th>Producto</th><th>Cantidad</th><th>Subtotal</th><th></th></tr>${rows}`;
+
+      const total = cart.reduce((acc, it) => acc + byId(it.id).price * it.qty, 0);
+      document.getElementById("total").textContent = "Total: € " + total.toFixed(2);
+    };
+
+    document.getElementById("tabla").addEventListener("change", e => {
+      if (e.target.type === "number") {
+        const tr = e.target.closest("tr"); setQty(tr.dataset.id, parseInt(e.target.value||"1",10)); render();
+      }
+    });
+    document.getElementById("tabla").addEventListener("click", e => {
+      if (e.target.classList.contains("remove")) {
+        const tr = e.target.closest("tr"); removeFromCart(tr.dataset.id); render();
+      }
+    });
+    document.getElementById("checkout").addEventListener("click", () => {
+      alert("Demo: aquí enlazarías a Stripe Checkout o similar.");
+    });
+
+    render();
+  </script>
+</body>
+</html>
