@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Área personal – MiTienda</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="container top">
+      <div class="logo">👗 MiTienda</div>
+      <div class="links">
+        <a href="productos.html">Productos</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="favoritos.html">Favoritos</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Área personal</h1>
+    <div id="loggedOut">
+      <p>Demo: introduce tu email para “entrar”. (Solo se guarda en tu navegador.)</p>
+      <input id="email" type="email" placeholder="tucorreo@ejemplo.com">
+      <button class="btn primary" id="loginBtn">Entrar</button>
+    </div>
+    <div id="loggedIn" style="display:none">
+      <p>Hola, <strong id="userEmail"></strong></p>
+      <button class="btn" id="logoutBtn">Salir</button>
+      <p style="color:#666;font-size:.95em;">* Para un inicio de sesión real, conecta Firebase/Auth0/Netlify Identity.</p>
+    </div>
+  </main>
+
+  <footer><div class="container"><p>© <span id="y"></span> MiTienda</p></div></footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script type="module">
+    import { getUser, login, logout } from "./assets/js/store.js";
+    const loggedOut = document.getElementById("loggedOut");
+    const loggedIn = document.getElementById("loggedIn");
+    const userEmail = document.getElementById("userEmail");
+
+    const render = () => {
+      const u = getUser();
+      if (u) { loggedOut.style.display="none"; loggedIn.style.display="block"; userEmail.textContent = u.email; }
+      else { loggedOut.style.display="block"; loggedIn.style.display="none"; }
+    };
+    document.getElementById("loginBtn").addEventListener("click", ()=>{
+      const email = document.getElementById("email").value.trim();
+      if (!email) return alert("Escribe un email");
+      login(email); render();
+    });
+    document.getElementById("logoutBtn").addEventListener("click", ()=>{ logout(); render(); });
+    render();
+  </script>
+</body>
+</html>
