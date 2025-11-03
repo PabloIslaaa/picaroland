@@ -3,37 +3,46 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Mi primera web</title>
-  <meta name="description" content="Mi web sencilla publicada con GitHub Pages." />
-  <link rel="stylesheet" href="style.css" />
-  <link rel="icon" href="favicon.ico">
+  <title>Tienda de Ropa – Inicio</title>
+  <meta name="description" content="Moda básica de calidad al mejor precio." />
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
   <header>
-    <div class="container">
-      <h1>¡Hola, mundo! 👋</h1>
-      <p>Esta es mi web hecha con HTML y GitHub Pages.</p>
-      <nav>
-        <a href="#sobre-mi">Sobre mí</a>
+    <div class="container top">
+      <div class="logo">👗 MiTienda</div>
+      <div class="links">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="favoritos.html">Favoritos</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="sobre.html">Sobre nosotros</a>
         <a href="contacto.html">Contacto</a>
-      </nav>
+        <a href="cuenta.html"><span class="badge">Área personal</span></a>
+      </div>
     </div>
   </header>
 
   <main class="container">
-    <h2 id="sobre-mi">Sobre mí</h2>
-    <p>Escribe aquí quién eres, qué ofreces o qué te gusta hacer.</p>
+    <h1>Nueva temporada</h1>
+    <p>Descubre básicos cómodos y duraderos.</p>
 
-    <h2>Imagen de ejemplo</h2>
-    <p>Cuando subas una imagen a <code>img/</code>, cámbiala aquí:</p>
-    <p><img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg" alt="Montaña bonita"></p>
+    <h2>Recomendados</h2>
+    <section id="grid" class="grid"></section>
   </main>
 
   <footer>
     <div class="container">
-      <p>© <span id="y"></span> Mi web. Hecha con HTML y GitHub Pages.</p>
+      <p>© <span id="y"></span> MiTienda</p>
     </div>
     <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+    <script src="assets/js/products.js"></script>
+    <script type="module">
+      import { mountProductGrid } from "./assets/js/ui.js";
+      const grid = document.getElementById("grid");
+      mountProductGrid(grid, window.PRODUCTS.slice(0,4));
+    </script>
   </footer>
 </body>
 </html>
+
