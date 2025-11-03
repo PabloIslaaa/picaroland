@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Mi primera web</title>
+  <style>
+    /* Estilos sencillos para que se vea bien */
+    body { font-family: system-ui, Arial, sans-serif; max-width: 720px; margin: 0 auto; padding: 24px; line-height: 1.6; }
+    header { text-align: center; }
+    nav a { margin-right: 12px; }
+    img { max-width: 100%; height: auto; }
+    footer { margin-top: 48px; font-size: 0.9em; color: #555; }
+    .btn { display:inline-block; padding:.6em 1em; border:1px solid #ccc; border-radius:8px; text-decoration:none }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>¡Hola, mundo! 👋</h1>
+    <p>Esta es mi primera web hecha con HTML y publicada gratis con GitHub Pages.</p>
+    <nav>
+      <a class="btn" href="#sobre-mi">Sobre mí</a>
+      <a class="btn" href="#contacto">Contacto</a>
+    </nav>
+  </header>
+
+  <main>
+    <h2 id="sobre-mi">Sobre mí</h2>
+    <p>Aquí puedes escribir quién eres, a qué te dedicas, etc.</p>
+
+    <h2>Foto de ejemplo</h2>
+    <p>Puedes subir imágenes al repo (carpeta <code>img/</code>) y enlazarlas:</p>
+    <p><img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Fronalpstock_big.jpg" alt="Montaña bonita"></p>
+
+    <h2 id="contacto">Contacto</h2>
+    <p>Para empezar sin complicarte, crea un formulario con <a href="https://forms.google.com" target="_blank" rel="noopener">Google Forms</a> y pega aquí el enlace.</p>
+  </main>
+
+  <footer>
+    <p>© <span id="y"></span> Mi web. Hecha con HTML y GitHub Pages.</p>
+    <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  </footer>
+</body>
+</html>
