@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Productos – MiTienda</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="container top">
+      <div class="logo">👗 MiTienda</div>
+      <div class="links">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="favoritos.html">Favoritos</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="contacto.html">Contacto</a>
+        <a href="cuenta.html"><span class="badge">Área personal</span></a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Catálogo</h1>
+    <section id="grid" class="grid"></section>
+  </main>
+
+  <footer><div class="container"><p>© <span id="y"></span> MiTienda</p></div></footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script src="assets/js/products.js"></script>
+  <script type="module">
+    import { mountProductGrid } from "./assets/js/ui.js";
+    const grid = document.getElementById("grid");
+    mountProductGrid(grid, window.PRODUCTS);
+  </script>
+</body>
+</html>
