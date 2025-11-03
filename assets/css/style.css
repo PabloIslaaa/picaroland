@@ -1,20 +1,21 @@
-/* --- Navegación con grupos izquierda/derecha --- */
-header { border-bottom: 1px solid #eee; background:#fff; position: sticky; top:0; z-index: 10; }
-header .top { display:flex; align-items:center; gap:16px; padding:12px var(--pad); }
-.logo { font-weight: 800; letter-spacing:.3px; }
+header { border-bottom: 1px solid #eee; background:#fff; position: sticky; top:0; z-index:10; }
+.top { display:flex; align-items:center; gap:16px; padding:12px var(--pad); }
+.logo { font-weight:800; letter-spacing:.3px; }
 
-/* contenedor flexible: links a la izq, iconos a la dcha */
 .navbar { display:flex; align-items:center; gap:12px; width:100%; }
-.nav-left { display:flex; gap:8px; flex-wrap:wrap; }
-.nav-spacer { flex:1; } /* empuja los iconos a la derecha */
-.nav-right { display:flex; align-items:center; gap:8px; }
+.nav-left-icons { display:flex; align-items:center; gap:8px; }
+.nav-spacer { flex:1; }
+.nav-right-links { display:flex; gap:8px; flex-wrap:wrap; }
 
-/* enlaces de texto */
-.nav-left a { text-decoration:none; display:inline-block; padding:.55em .85em; border:1px solid #ddd; border-radius:8px; color:#111; }
-.nav-left a:hover { background:#f6f6f6; }
-.nav-left a.active { border-color:#111; background:#f6f6f6; }
+/* Enlaces de texto (derecha) */
+.nav-right-links a {
+  text-decoration:none; display:inline-block; padding:.55em .85em;
+  border:1px solid #ddd; border-radius:8px; color:#111;
+}
+.nav-right-links a:hover { background:#f6f6f6; }
+.nav-right-links a.active { border-color:#111; background:#f6f6f6; }
 
-/* botones de icono (favoritos, carrito, perfil) */
+/* Botones de icono (izquierda) */
 .icon-btn {
   display:inline-flex; align-items:center; justify-content:center;
   width:38px; height:38px; border:1px solid #ddd; border-radius:10px;
@@ -23,15 +24,16 @@ header .top { display:flex; align-items:center; gap:16px; padding:12px var(--pad
 .icon-btn:hover { background:#f6f6f6; }
 .icon { width:20px; height:20px; display:block; }
 
-/* contador (badge) arriba a la derecha del icono */
+/* Contadores */
 .badge {
   position:absolute; top:-6px; right:-6px; min-width:18px; height:18px;
   padding:0 4px; background:#111; color:#fff; border-radius:999px;
   font-size:.75em; line-height:18px; text-align:center;
 }
 
-/* utilidades de accesibilidad (texto solo para lectores) */
+/* Accesibilidad: texto oculto visualmente */
 .visually-hidden {
   position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden;
   clip:rect(0,0,0,0); white-space:nowrap; border:0;
 }
+
