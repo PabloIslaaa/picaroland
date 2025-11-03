@@ -1,0 +1,35 @@
+// assets/js/ui.js
+import { addToCart, toggleFav, loadFav } from "./store.js";
+
+export const productCard = (p, isFav=false) => `
+  <article class="card" data-id="${p.id}">
+    <img src="${p.image}" alt="${p.name}">
+    <div class="body">
+      <h3>${p.name}</h3>
+      <div class="price">€ ${p.price.toFixed(2)}</div>
+      <div class="actions">
+        <button class="btn primary add">Añadir al carrito</button>
+        <button class="btn fav">${isFav ? "★" : "☆"} Fav</button>
+      </div>
+    </div>
+  </article>
+`;
+
+export const mountProductGrid = (el, products) => {
+  const favSet = loadFav();
+  el.innerHTML = products.map(p => productCard(p, favSet.has(p.id))).join("");
+  el.addEventListener("click", (e) => {
+    const card = e.target.closest(".card");
+    if (!card) return;
+    const id = card.dataset.id;
+    if (e.target.classList.contains("add")) {
+      addToCart(id, 1);
+      e.target.textContent = "Añadido ✓";
+      setTimeout(()=> e.target.textContent = "Añadir al carrito", 1200);
+    }
+    if (e.target.classList.contains("fav")) {
+      const nowFav = toggleFav(id);
+      e.target.textContent = nowFav ? "★ Fav" : "☆ Fav";
+    }
+  });
+};
