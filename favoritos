@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Favoritos – MiTienda</title>
+  <link rel="stylesheet" href="assets/css/style.css" />
+</head>
+<body>
+  <header>
+    <div class="container top">
+      <div class="logo">👗 MiTienda</div>
+      <div class="links">
+        <a href="productos.html">Productos</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="cuenta.html">Área personal</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Favoritos</h1>
+    <section id="grid" class="grid"></section>
+  </main>
+
+  <footer><div class="container"><p>© <span id="y"></span> MiTienda</p></div></footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+  <script src="assets/js/products.js"></script>
+  <script type="module">
+    import { loadFav } from "./assets/js/store.js";
+    import { mountProductGrid } from "./assets/js/ui.js";
+    const favSet = loadFav();
+    const favProducts = window.PRODUCTS.filter(p => favSet.has(p.id));
+    const grid = document.getElementById("grid");
+    if (favProducts.length) mountProductGrid(grid, favProducts);
+    else grid.innerHTML = "<p>No tienes favoritos aún. Ve a <a href='productos.html'>Productos</a> y marca ☆.</p>";
+  </script>
+</body>
+</html>
