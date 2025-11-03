@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Área personal – MiTienda</title>
+  <meta name="description" content="Área personal del cliente: perfil, pedidos, direcciones." />
+  <link rel="stylesheet" href="assets/css/style.css" />
+  <style>
+    .tabs { display: flex; gap: 8px; margin: 16px 0; flex-wrap: wrap; }
+    .tab { padding: .6em .9em; border:1px solid #ddd; border-radius:8px; cursor:pointer; background:#fff; }
+    .tab.active { border-color:#000; }
+    .panel { display:none; }
+    .panel.active { display:block; }
+    form .row { display:grid; grid-template-columns: 1fr 1fr; gap:12px; }
+    form .row .full { grid-column: 1 / -1; }
+    form input, form textarea { width:100%; padding:.6em .7em; border:1px solid #ddd; border-radius:8px; }
+    .muted { color:#666; font-size:.95em; }
+    .pill { display:inline-block; padding:.2em .6em; border:1px solid #ddd; border-radius:999px; font-size:.85em; }
+    details summary { cursor: pointer; }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container top">
+      <div class="logo">👗 MiTienda</div>
+      <div class="links">
+        <a href="index.html">Inicio</a>
+        <a href="productos.html">Productos</a>
+        <a href="favoritos.html">Favoritos</a>
+        <a href="carrito.html">Carrito</a>
+        <a href="sobre.html">Sobre</a>
+        <a href="contacto.html">Contacto</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <h1>Área personal</h1>
+
+    <!-- Estado no logueado -->
+    <section id="loggedOut">
+      <p>Demo: introduce tu email para “entrar”. Se guardará solo en este navegador.</p>
+      <input id="email" type="email" placeholder="tucorreo@ejemplo.com">
+      <button class="btn primary" id="loginBtn">Entrar</button>
+      <p class="muted">Para un inicio de sesión real tendrás que integrar un servicio de autenticación (Firebase/Auth0/etc.).</p>
+    </section>
+
+    <!-- Estado logueado -->
+    <section id="loggedIn" style="display:none">
+      <p>Bienvenido/a, <strong id="userEmail"></strong></p>
+      <div class="tabs" role="tablist">
+        <button class="tab active" data-tab="perfil">Perfil</button>
+        <button class="tab" data-tab="pedidos">Pedidos</button>
+        <button class="tab" data-tab="direccion">Dirección</button>
+        <span style="flex:1"></span>
+        <button class="btn" id="logoutBtn">Salir</button>
+      </div>
+
+      <!-- Panel: Perfil -->
+      <section id="panel-perfil" class="panel active">
+        <h2>Perfil</h2>
+        <form id="formPerfil">
+          <div class="row">
+            <div>
+              <label>Nombre</label>
+              <input name="nombre" placeholder="Tu nombre">
+            </div>
+            <div>
+              <label>Teléfono</label>
+              <input name="telefono" placeholder="+34 600 000 000">
+            </div>
+            <div class="full">
+              <label>Notas</label>
+              <textarea name="notas" rows="3" placeholder="Preferencias de talla, indicaciones de entrega, etc."></textarea>
+            </div>
+          </div>
+          <p class="muted">Este perfil solo se guarda en <em>este navegador</em> (localStorage).</p>
+          <button class="btn primary" type="submit">Guardar perfil</button>
+        </form>
+      </section>
+
+      <!-- Panel: Pedidos -->
+      <section id="panel-pedidos" class="panel">
+        <h2>Pedidos</h2>
+        <p class="muted">Historial de pedidos de ejemplo. En producción, esto viene de tu servidor o plataforma de ecommerce.</p>
+        <table class="table" id="tablaPedidos">
+          <tr><th>ID</th><th>Fecha</th><th>Estado</th><th>Total</th><th></th></tr>
+        </table>
+      </section>
+
+      <!-- Panel: Dirección -->
+      <section id="panel-direccion" class="panel">
+        <h2>Dirección de envío</h2>
+        <form id="formDireccion">
+          <div class="row">
+            <div class="full">
+              <label>Calle y número</label>
+              <input name="line1" placeholder="Calle Ejemplo 123">
+            </div>
+            <div>
+              <label>Ciudad</label>
+              <input name="city" placeholder="Madrid">
+            </div>
+            <div>
+              <label>Código postal</label>
+              <input name="zip" placeholder="28001">
+            </div>
+            <div>
+              <label>Provincia</label>
+              <input name="state" placeholder="Madrid">
+            </div>
+            <div>
+              <label>País</label>
+              <input name="country" placeholder="España">
+            </div>
+          </div>
+          <button class="btn primary" type="submit">Guardar dirección</button>
+        </form>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <p>© <span id="y"></span> MiTienda • Demo sin servidor</p>
+    </div>
+  </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
+
+  <!-- Scripts -->
+  <script type="module">
+    import { getUser, login, logout, getProfile, saveProfile, getOrders, saveOrders, seedDemoOrders } from "./assets/js/store.js";
+
+    // ------------ Estado de sesión (demo) ------------
+    const $ = s => document.querySelector(s);
+    const loggedOut = $("#loggedOut");
+    const loggedIn  = $("#loggedIn");
+    const userEmail = $("#userEmail");
+
+    const renderAuth = () => {
+      const u = getUser();
+      if (u) {
+        loggedOut.style.display = "none";
+        loggedIn.style.display = "block";
+        userEmail.textContent = u.email;
+        loadPerfilForm();
+        loadDireccionForm();
+        seedDemoOrders();
+        renderPedidos();
+      } else {
+        loggedOut.style.display = "block";
+        loggedIn.style.display = "none";
+      }
+    };
+
+    $("#loginBtn")?.addEventListener("click", () => {
+      const email = $("#email").value.trim();
+      if (!email) return alert("Escribe un email");
+      login(email);
+      renderAuth();
+    });
+    $("#logoutBtn")?.addEventListener("click", () => { logout(); renderAuth(); });
+
+    // ------------ Tabs ------------
+    document.addEventListener("click", (e) => {
+      if (!e.target.classList.contains("tab")) return;
+      const tab = e.target.dataset.tab;
+      document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t === e.target));
+      document.querySelectorAll(".panel").forEach(p => p.classList.remove("active"));
+      document.querySelector("#panel-" + tab).classList.add("active");
+    });
+
+    // ------------ Perfil ------------
+    const formPerfil = $("#formPerfil");
+    function loadPerfilForm() {
+      const p = getProfile() || {};
+      formPerfil.nombre.value   = p.nombre   || "";
+      formPerfil.telefono.value = p.telefono || "";
+      formPerfil.notas.value    = p.notas    || "";
+    }
+    formPerfil?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const data = {
+        nombre:   formPerfil.nombre.value.trim(),
+        telefono: formPerfil.telefono.value.trim(),
+        notas:    formPerfil.notas.value.trim(),
+      };
+      // Mezcla con dirección actual (si existe)
+      const current = getProfile() || {};
+      saveProfile({ ...current, ...data });
+      alert("Perfil guardado");
+    });
+
+    // ------------ Dirección ------------
+    const formDireccion = $("#formDireccion");
+    function loadDireccionForm() {
+      const p = getProfile() || {};
+      formDireccion.line1.value  = p.line1  || "";
+      formDireccion.city.value   = p.city   || "";
+      formDireccion.zip.value    = p.zip    || "";
+      formDireccion.state.value  = p.state  || "";
+      formDireccion.country.value= p.country|| "";
+    }
+    formDireccion?.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const addr = {
+        line1:  formDireccion.line1.value.trim(),
+        city:   formDireccion.city.value.trim(),
+        zip:    formDireccion.zip.value.trim(),
+        state:  formDireccion.state.value.trim(),
+        country:formDireccion.country.value.trim(),
+      };
+      const current = getProfile() || {};
+      saveProfile({ ...current, ...addr });
+      alert("Dirección guardada");
+    });
+
+    // ------------ Pedidos (demo) ------------
+    function renderPedidos() {
+      const tabla = $("#tablaPedidos");
+      const orders = getOrders();
+      if (!orders.length) {
+        tabla.innerHTML = "<tr><td>No hay pedidos todavía.</td></tr>";
+        return;
+      }
+      tabla.innerHTML = `<tr><th>ID</th><th>Fecha</th><th>Estado</th><th>Total</th><th></th></tr>` +
+        orders.map(o => `
+          <tr>
+            <td><span class="pill">${o.id}</span></td>
+            <td>${o.date}</td>
+            <td>${o.status}</td>
+            <td>€ ${o.total.toFixed(2)}</td>
+            <td>
+              <details>
+                <summary>Ver detalles</summary>
+                <ul>
+                  ${o.items.map(it => `<li>${it.qty} × ${it.name} — € ${it.price.toFixed(2)}</li>`).join("")}
+                </ul>
+              </details>
+            </td>
+          </tr>
+        `).join("");
+    }
+
+    // Init
+    renderAuth();
+  </script>
+</body>
+</html>
