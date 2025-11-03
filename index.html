@@ -3,46 +3,76 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Tienda de Ropa – Inicio</title>
-  <meta name="description" content="Moda básica de calidad al mejor precio." />
+  <title>MiTienda – Moda cómoda y básica</title>
+  <meta name="description" content="Tienda de ropa sencilla y de calidad. Envíos rápidos y devoluciones fáciles." />
   <link rel="stylesheet" href="assets/css/style.css" />
+  <link rel="icon" href="favicon.ico">
 </head>
 <body>
+  <!-- Header común -->
   <header>
     <div class="container top">
       <div class="logo">👗 MiTienda</div>
-      <div class="links">
+      <nav>
         <a href="index.html">Inicio</a>
         <a href="productos.html">Productos</a>
         <a href="favoritos.html">Favoritos</a>
         <a href="carrito.html">Carrito</a>
-        <a href="sobre.html">Sobre nosotros</a>
+        <a href="sobre.html">Sobre</a>
         <a href="contacto.html">Contacto</a>
-        <a href="cuenta.html"><span class="badge">Área personal</span></a>
-      </div>
+        <a href="cuenta.html">Área personal</a>
+      </nav>
     </div>
   </header>
 
+  <!-- Hero / bienvenida -->
   <main class="container">
-    <h1>Nueva temporada</h1>
-    <p>Descubre básicos cómodos y duraderos.</p>
+    <section class="hero">
+      <h1>Nueva temporada</h1>
+      <p class="muted">Básicos cómodos que combinan con todo. Hecho para durar.</p>
+      <p>
+        <a class="btn" href="productos.html">Ver productos</a>
+        <a class="btn outline" href="sobre.html">Conócenos</a>
+      </p>
+    </section>
 
-    <h2>Recomendados</h2>
-    <section id="grid" class="grid"></section>
+    <!-- Avances (cartas demo) -->
+    <h2>Destacados</h2>
+    <section class="grid">
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1200&auto=format&fit=crop" alt="Camiseta básica">
+        <div class="body">
+          <h3>Camiseta básica</h3>
+          <p class="muted">Algodón orgánico • €14.99</p>
+          <a class="btn outline" href="productos.html">Ver catálogo</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1520975657286-5d98f7e73e54?q=80&w=1200&auto=format&fit=crop" alt="Sudadera unisex">
+        <div class="body">
+          <h3>Sudadera unisex</h3>
+          <p class="muted">Abrigada y suave • €29.90</p>
+          <a class="btn outline" href="productos.html">Ver catálogo</a>
+        </div>
+      </article>
+      <article class="card">
+        <img src="https://images.unsplash.com/photo-1539533018447-63fcce2678f5?q=80&w=1200&auto=format&fit=crop" alt="Pantalón chino">
+        <div class="body">
+          <h3>Pantalón chino</h3>
+          <p class="muted">Corte recto • €39.00</p>
+          <a class="btn outline" href="productos.html">Ver catálogo</a>
+        </div>
+      </article>
+    </section>
   </main>
 
+  <!-- Footer -->
   <footer>
     <div class="container">
-      <p>© <span id="y"></span> MiTienda</p>
+      <p>© <span id="y"></span> MiTienda • Hecho con GitHub Pages</p>
     </div>
-    <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
-    <script src="assets/js/products.js"></script>
-    <script type="module">
-      import { mountProductGrid } from "./assets/js/ui.js";
-      const grid = document.getElementById("grid");
-      mountProductGrid(grid, window.PRODUCTS.slice(0,4));
-    </script>
   </footer>
+  <script>document.getElementById('y').textContent = new Date().getFullYear();</script>
 </body>
 </html>
 
